@@ -59,7 +59,7 @@ const Admin = () => {
                         </Table>
                     </TableContainer>
                     }
-                    {data && data.page > 1 && 
+                    {data && (data.page > 1 || data.has_next) && 
                         <div className="pagination">
                           <Button size='sm' isDisabled={isPending || data.page <= 1} onClick={decrementPageNumber}><Icon as={ArrowBackIcon}/></Button>
                           <Button size='sm' isDisabled={isPending || !data.has_next} onClick={incrementPageNumber}><Icon as={ArrowForwardIcon}/></Button>
