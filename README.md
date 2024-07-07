@@ -7,19 +7,19 @@
 ## 機能一覧
 | トップ画面                                                                                           | ログイン後のトップ画面                                                               |
 | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| ![トップ画面](https://github.com/v420v/QRmark/assets/106643445/a809098f-d513-4913-93e1-06767c6d1436) | ![ログイン後のトップ画面](https://github.com/v420v/QRmark/assets/106643445/12f5e644-3e3b-4352-8251-529f905d7ce8)
+| ![トップ画面](https://github.com/v420v/QRmark/assets/106643445/06538ca3-9264-4ff3-887f-3e21e2f73e2f) | ![ログイン後のトップ画面](https://github.com/v420v/QRmark/assets/106643445/5bf89b62-89d4-4441-a8ca-1ee2c8e9e25a)
 | ログイン画面、新規登録画面に遷移できる様になっています。                                                     | QRマーク履歴が表示されます。「QRマークをスキャンする」ボタンでカメラが開きます |
 
 
 | 新規登録画面                                                                                           | ログイン画面                                                                     |
 | --------------------------------------------------------------------------------------------------   | ------------------------------------------------------------------------------ |
-| ![新規登録画面](https://github.com/v420v/QRmark/assets/106643445/06f19a26-e4f0-40d4-baa2-733750be675a) | ![ログイン画面](https://github.com/v420v/QRmark/assets/106643445/dd7c1e2f-22fd-4cc0-ad7f-39421eea24d8)
+| ![新規登録画面](https://github.com/v420v/QRmark/assets/106643445/28e7b21e-da32-4bdf-8e28-90f6e180d867) | ![ログイン画面](https://github.com/v420v/QRmark/assets/106643445/96cdc311-5b1d-48d1-b8e5-9cd5e33d51ad)
 | ユーザーの新規登録                                                                                      | ユーザーのログイン                                |
 
-| 学校のポイント集計結果画面                                                                                           | 学校検索画面                                                          |
+| 学校のポイント集計結果画面                                                                                           | 管理者画面                                                          |
 | --------------------------------------------------------------------------------------------------   | ------------------------------------------------------------------------------ |
-| ![学校のポイント集計結果画面](https://github.com/v420v/QRmark/assets/106643445/d9255a69-5727-41ae-b6c4-bca9f8145a8c) | ![学校検索画面](https://github.com/v420v/QRmark/assets/106643445/79aaa3d1-c0ff-4732-a011-ad60acdaf495)
-| 学校のその月のポイント集計結果が表示されます                                                                                     | 学校を検索                                            |
+| ![学校のポイント集計結果画面](https://github.com/v420v/QRmark/assets/106643445/9c0a16f9-030b-4663-80fc-7e0fa2f5b20f) | ![管理者画面](https://github.com/v420v/QRmark/assets/106643445/dc8425cc-bbef-422d-b18f-2cd6476a825e)
+| 学校のその月のポイント集計結果が表示されます。ダウンロードも可能。                                                           | 管理者画面                                            |
 
 
 ## ER図
@@ -27,52 +27,6 @@
 
 ## AWS 構成図
 <img width="771" alt="Screenshot 2024-07-04 at 15 48 30" src="https://github.com/v420v/QRmark/assets/106643445/0ed84a76-cda9-4af1-ae63-2fb79f8a82d5">
+`
 
 
-
-## デプロイメモ
-
-### ENV
-```.bash_profile
-export DB_USERNAME=
-export DB_PASSWORD=
-export DB_HOST=
-export DB_NAME=
-
-export GMAIL_APP_PASSWORD=
-```
-
-### バックエンド
-```
-cd backend
-go build main.go
-nohup ./main &
-```
-
-### フロントエンド
-```
-$ cd frontend
-$ npm install
-$ npm run build
-$ sudo rm -rf /usr/share/nginx/html/*
-$ sudo cp -r /home/ec2-user/QRmark/frontend/build/* /usr/share/nginx/html/
-$ sudo systemctl restart nginx
-```
-
-### Nginx
-/etc/nginx/conf.d/default.conf
-```
-server {
-    listen       80;
-    listen  [::]:80;
-
-    location /api/ {
-        proxy_pass http://localhost:8080/;
-    }
-
-    location / {
-        root   /usr/share/nginx/html;
-        try_files $uri $uri/ /index.html;
-    }
-}
-```
