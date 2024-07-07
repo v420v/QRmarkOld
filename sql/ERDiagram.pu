@@ -53,7 +53,6 @@ entity "school_static_points" as school_static_points {
   + school_id : integer [FK]
   + company_id : integer [FK]
   + total_points : integer
-  + current_points : integer
   + created_year_month : datetime
   --
   * (school_id, company_id, created_year_month)
