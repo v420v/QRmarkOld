@@ -23,7 +23,7 @@
 
 
 ## ER図
-![sql](https://github.com/v420v/QRmark/assets/106643445/1fd13029-0e08-4927-8d16-f5fd0dd98745)
+![sql](https://github.com/v420v/QRmark/assets/106643445/73751f03-fdac-4cc8-bf49-a5dbd0b0a998)
 
 ## AWS 構成図
 <img width="771" alt="Screenshot 2024-07-04 at 15 48 30" src="https://github.com/v420v/QRmark/assets/106643445/0ed84a76-cda9-4af1-ae63-2fb79f8a82d5">
