@@ -1,0 +1,67 @@
+version: "3.3"
+
+services:
+    nginx:
+        image: nginx:latest
+        ports:
+          - "80:80"
+        volumes:
+          - ./nginx.conf:/etc/nginx/nginx.conf
+        depends_on:
+          - api
+          - frontend
+
+    mysql:
+        platform: linux/x86_64
+        image: mysql:5.7
+        container_name: db-for-qrmarkapi
+        command:
+            - --character-set-server=utf8mb4
+            - --collation-server=utf8mb4_unicode_ci
+            - --sql-mode=ONLY_FULL_GROUP_BY,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+        environment:
+            MYSQL_ROOT_USER: ${MYSQL_ROOT_USER}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            TZ: "Asia/Tokyo"
+
+        ports:
+            - "3306:3306"
+
+        volumes:
+            - db-volume:/var/lib/mysql
+
+    api:
+        image: golang:latest
+        container_name: qrmarkapi
+        volumes:
+            - ./backend:/api
+            - ./keys:/root/.ssh:ro
+        working_dir: /api
+        command: bash -c "go run main.go"
+        ports:
+          - "8080:8080"
+        environment:
+            DB_USERNAME: ${DB_USERNAME}
+            DB_PASSWORD: ${DB_PASSWORD}
+            DB_HOST: "db-for-qrmarkapi"
+            DB_NAME: ${DB_NAME}
+            GMAIL_APP_PASSWORD: ${GMAIL_APP_PASSWORD}
+        depends_on:
+          - mysql
+
+    frontend:
+        image: node:20.14-alpine
+        volumes:
+          - ./frontend:/app
+        working_dir: /app
+        ports:
+          - "3000:3000"
+        command: sh -c "npm install && npm start"
+        environment:
+            CHOKIDAR_USEPOLLING: "true"
+
+volumes:
+    db-volume:

@@ -1,0 +1,265 @@
+
+* {
+  font-family: 'Noto Sans JP', Arial, sans-serif;
+  color: #464956;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+hr {
+  padding-bottom: 10px;
+}
+
+button {
+  -moz-box-sizing: border-box !important;
+  box-sizing: border-box !important;
+}
+
+header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.home-container {
+  display: flex;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 30px 10px;
+  gap: 10px;
+}
+
+.home-left {
+  max-width: 270px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.home-left a{
+  padding: 20px 30px;
+}
+
+.home-middle {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.home-total-points {
+  font-size: 3rem;
+  font-weight: 400;
+}
+
+.home-qrmark-history {
+  padding: 30px 0px;
+}
+
+@media screen and (max-width: 800px) {
+  .home-left {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .home-left a{
+    padding: 20px 10px;
+  }
+  
+  .home-container {
+    padding: 10px 10px;
+    flex-direction: column;
+  }
+  .home-middle {
+    order: -1;
+  }
+}
+
+.school-detail-container {
+  display: flex;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 30px 10px;
+  gap: 10px;
+}
+
+.school-detail-middle {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.admin-panel-container {
+  display: flex;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 30px 10px;
+}
+
+.admin-panel-middle {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.register-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 30px 10px;
+}
+
+.register-container h2{
+  text-align: center;
+}
+
+.select-school-list {
+  padding: 20px 0px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.select-school-list-school {
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.select-school-list-school-selected {
+  font-weight: 600;
+  color: #e5ad15;
+}
+
+.register-form-bottom-text {
+  padding: 15px 0px;
+}
+
+.register-form-bottom-text a{
+  color: #e5ad15;
+  font-weight: 600;
+}
+
+.register-success-message {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.register-success-message h3{
+  font-weight: 600;
+}
+
+.verify-container {
+  display: flex;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 10px;
+}
+
+.verify-success-message {
+  text-align: center;
+}
+
+.verify-success-message a{
+  color: #e5ad15;
+  font-weight: 600;
+}
+
+.qrmark-reader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 10px;
+}
+
+.qrmark-reader {
+  width: 100%;
+  height: 100%;
+  max-width: 500px;
+  max-height: 500px;
+  text-align: center;
+  padding: 10px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.qrmark-reader-error-message {
+  padding: 20px;
+  text-align: center;
+}
+
+.qrmark-reader {
+  border-radius: 10px;
+}
+
+.qrmark-reader video {
+  border-radius: 10px;
+}
+
+.qrmark-reader video {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  object-fit: cover;
+}
+
+.base-color {
+  color: #e5ad15;
+}
+
+.about-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 80px 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 80vh;
+}
+
+.about-container h1{
+  font-size: min(7vw, 130px);
+  line-height: min(10vw, 160px);
+  font-weight: 900;
+}
+
+@media screen and (max-width: 900px) {
+  .about-container h1{
+    font-size: min(10vw, 110px);
+    line-height: min(14vw, 150px);
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .about-container span {
+    display: block;
+  }
+  .about-container {
+    flex-direction: column;
+    padding: 0px 10px 40px 10px;
+  }
+}
+
