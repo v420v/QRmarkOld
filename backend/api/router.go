@@ -60,6 +60,7 @@ func NewRouter(db *sql.DB) *mux.Router {
 	r.HandleFunc("/school/search", schoolController.SearchSchoolHandler).Methods(http.MethodGet, http.MethodOptions)
 
 	r.HandleFunc("/login", userController.LoginHandler).Methods(http.MethodPost, http.MethodOptions)
+	r.HandleFunc("/logout", userController.LogoutHandler).Methods(http.MethodDelete, http.MethodOptions)
 	r.HandleFunc("/company/list", companyController.SelectCompanyListHandler).Methods(http.MethodGet, http.MethodOptions)
 
 	return r

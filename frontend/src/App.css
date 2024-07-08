@@ -22,6 +22,7 @@ header {
   display: flex;
   justify-content: flex-end;
   padding: 10px;
+  gap: 10px;
 }
 
 .pagination {
@@ -168,7 +169,7 @@ header {
   flex-direction: column;
   max-width: 600px;
   margin: 0 auto;
-  padding: 30px 10px;
+  padding: 100px 10px;
 }
 
 .register-container h2{
@@ -278,6 +279,7 @@ header {
 .about-container {
   display: flex;
   justify-content: space-around;
+  flex-direction: column;
   padding: 80px 30px;
   max-width: 1200px;
   margin: 0 auto;
@@ -285,9 +287,14 @@ header {
 }
 
 .about-container h1{
-  font-size: min(7vw, 130px);
-  line-height: min(10vw, 160px);
+  font-size: min(9vw, 130px);
+  line-height: min(12vw, 170px);
   font-weight: 900;
+  text-align: center;
+}
+
+.about-container span {
+  display: block;
 }
 
 @media screen and (max-width: 900px) {

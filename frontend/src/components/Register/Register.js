@@ -135,7 +135,7 @@ const Register = () => {
 
     if (registerSuccess) {
         return (
-            <><Header/>
+            <>
             <div className="register-container">
                 <div className="register-success-message">
                     <h3>{verifyingEmail}</h3>
@@ -147,7 +147,7 @@ const Register = () => {
     }
 
     return (
-        <><Header/>
+        <>
         <div className="register-container">
             <h2>新規登録</h2>
 

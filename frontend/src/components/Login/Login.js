@@ -48,7 +48,6 @@ const Login = () => {
 
     return (
         <>
-        <Header/>
         <div className="register-container">
             <h2>ログイン</h2>
             {errMsg && errMsg}

@@ -60,6 +60,18 @@ func loadRSAPrivateKey() (*rsa.PrivateKey, error) {
 	return privateKey, nil
 }
 
+func (c *UserController) LogoutHandler(w http.ResponseWriter, req *http.Request) {
+	cookie := &http.Cookie{
+		Name:     "token",
+		Value:    "",
+		Expires:  time.Unix(0, 0),
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+	}
+
+	http.SetCookie(w, cookie)
+}
+
 func (c *UserController) LoginHandler(w http.ResponseWriter, req *http.Request) {
 	type LoginInfo struct {
 		Email    string
@@ -121,10 +133,6 @@ func (c *UserController) LoginHandler(w http.ResponseWriter, req *http.Request) 
 	}
 
 	http.SetCookie(w, cookie)
-
-	json.NewEncoder(w).Encode(signedToken)
-
-	w.WriteHeader(http.StatusOK)
 }
 
 func (c *UserController) CurrentUserHandler(w http.ResponseWriter, req *http.Request) {
