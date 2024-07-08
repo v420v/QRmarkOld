@@ -153,3 +153,43 @@ func SelectUserDetail(db *sql.DB, userID int) (models.User, error) {
 
 	return user, nil
 }
+
+func SelectUserList(db *sql.DB, page int) ([]models.UserRes, bool, error) {
+	const sqlStr = `
+	select users.user_id, users.name, users.email, users.role, users.verified, schools.school_id, schools.name, schools.created_at, users.created_at from users join schools ON users.school_id = schools.school_id order by users.created_at desc limit ? offset ?;
+	`
+
+	limit := 10
+	hasNext := false
+
+	rows, err := db.Query(sqlStr, limit+1, ((page - 1) * limit))
+	if err != nil {
+		return nil, hasNext, err
+	}
+
+	defer rows.Close()
+
+	userList := make([]models.UserRes, 0)
+	for rows.Next() {
+		var user models.UserRes
+		rows.Scan(
+			&user.ID,
+			&user.Name,
+			&user.Email,
+			&user.Role,
+			&user.Verified,
+			&user.School.ID,
+			&user.School.Name,
+			&user.School.CreatedAt,
+			&user.CreatedAt,
+		)
+		userList = append(userList, user)
+	}
+
+	if len(userList) > limit {
+		hasNext = true
+		userList = userList[:limit]
+	}
+
+	return userList, hasNext, nil
+}

@@ -266,3 +266,28 @@ func (c *UserController) SelectUserDetailHandler(w http.ResponseWriter, req *htt
 
 	json.NewEncoder(w).Encode(user)
 }
+
+func (c *UserController) SelectUserListHandler(w http.ResponseWriter, req *http.Request) {
+	page := 0
+	queryMap := req.URL.Query()
+
+	if p, ok := queryMap["page"]; ok && len(p) > 0 {
+		var err error
+		page, err = strconv.Atoi(p[0])
+		if err != nil {
+			err = apierrors.BadParam.Wrap(err, "page in query param must be number")
+			apierrors.ErrorHandler(w, req, err)
+			return
+		}
+	} else {
+		page = 1
+	}
+
+	userList, err := c.service.SelectUserListService(page)
+	if err != nil {
+		apierrors.ErrorHandler(w, req, err)
+		return
+	}
+
+	json.NewEncoder(w).Encode(userList)
+}

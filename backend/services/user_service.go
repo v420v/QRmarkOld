@@ -63,3 +63,13 @@ func (s *QrmarkAPIService) SelectUserByEmailService(email string) (models.User, 
 
 	return user, nil
 }
+
+func (s *QrmarkAPIService) SelectUserListService(page int) (models.UserList, error) {
+	userList, hasNext, err := repositories.SelectUserList(s.DB, page)
+	if err != nil {
+		err = apierrors.GetDataFailed.Wrap(err, "fail to get data")
+		return models.UserList{}, err
+	}
+
+	return models.UserList{UserList: userList, HasNext: hasNext, Page: page}, nil
+}

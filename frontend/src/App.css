@@ -90,7 +90,7 @@ header {
 .school-detail-container {
   display: flex;
   justify-content: center;
-  max-width: 1200px;
+  max-width: 900px;
   margin: 0 auto;
   min-height: 100vh;
   padding: 30px 10px;
@@ -102,6 +102,48 @@ header {
   display: flex;
   gap: 10px;
   flex-direction: column;
+}
+
+.admin-dashboard-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 10px;
+  gap: 20px;
+}
+
+.admin-dashboard {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.admin-dashboard-middle {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.admin-dashboard-left {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 30%;
+}
+
+@media screen and (max-width: 800px) {
+  .admin-dashboard {
+    flex-direction: column;
+  }
+  .admin-dashboard-middle {
+    width: 100%;
+  }
+  .admin-dashboard-left {
+    width: 100%;
+    flex-basis: 100%;
+  }
 }
 
 .admin-panel-container {

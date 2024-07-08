@@ -63,7 +63,7 @@ func SelectSchoolPoints(db *sql.DB, schoolID int, year_month_date time.Time) ([]
 func SelectUserQrmarkList(db *sql.DB, userID int, page int) ([]models.Qrmark, bool, error) {
 	sqlStr := `SELECT b.qrmark_id, b.user_id, s.name AS school_name, c.name AS company_name, b.points, b.created_at FROM qrmarks b JOIN schools s ON b.school_id = s.school_id JOIN companys c ON b.company_id = c.company_id where user_id = ? order by created_at desc LIMIT ? OFFSET ?;`
 
-	limit := 5
+	limit := 10
 	hasNext := false
 
 	rows, err := db.Query(sqlStr, userID, limit+1, ((page - 1) * limit))
@@ -96,9 +96,9 @@ func SelectUserQrmarkList(db *sql.DB, userID int, page int) ([]models.Qrmark, bo
 }
 
 func SelectQrmarkList(db *sql.DB, page int) ([]models.Qrmark, bool, error) {
-	sqlStr := `SELECT b.qrmark_id, b.user_id, s.name AS school_name, c.name AS company_name, b.points, b.created_at FROM qrmarks b JOIN schools s ON b.school_id = s.school_id JOIN companys c ON b.company_id = c.company_id LIMIT ? OFFSET ?;`
+	sqlStr := `SELECT b.qrmark_id, b.user_id, s.name AS school_name, c.name AS company_name, b.points, b.created_at FROM qrmarks b JOIN schools s ON b.school_id = s.school_id JOIN companys c ON b.company_id = c.company_id order by created_at desc LIMIT ? OFFSET ?;`
 
-	limit := 5
+	limit := 10
 	hasNext := false
 
 	rows, err := db.Query(sqlStr, limit+1, ((page - 1) * limit))

@@ -66,10 +66,10 @@ const SchoolDetail = () => {
                 <div className="school-detail-middle">
                     <h2>{schoolDetail && schoolDetail.name}</h2>
                     <hr></hr>
-                    <Input type="month" value={date} onChange={handleDateChange} />
+                    <Input size={['sm']} type="month" value={date} onChange={handleDateChange} />
                     {schoolPoints && schoolPoints.length > 1 && 
                     <TableContainer>
-                        <Table size={['sm', 'md', 'lg']}>
+                        <Table size={['sm']}>
                             <Thead>
                               <Tr>
                                 <Th>企業名</Th>

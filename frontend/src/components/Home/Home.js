@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from "moment/moment";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { Button, TableContainer, Table, Thead, Tr, Th, Td, Tbody } from '@chakra-ui/react'
+import { Button, TableContainer, Table, Thead, Tr, Th, Td, Tbody, Stack, Skeleton } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom';
 
 const TotalPoints = () => {
@@ -70,7 +70,7 @@ const Home = () => {
         {(historyData && historyData.qrmarks.length > 0) &&
           <div className="home-qrmark-history">
             <TableContainer>
-              <Table size={['sm', 'md', 'lg']}>
+              <Table size={['sm', 'md']}>
                 <Thead>
                   <Tr>
                     <Th>日付</Th>

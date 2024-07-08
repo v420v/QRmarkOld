@@ -17,6 +17,7 @@ type UserServicer interface {
 	VerifyUserService(token string) error
 	SelectUserByEmailService(email string) (models.User, error)
 	InsertVerificationTokenService(token models.VerificationToken) error
+	SelectUserListService(page int) (models.UserList, error)
 }
 
 type SchoolServicer interface {

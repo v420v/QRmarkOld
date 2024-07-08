@@ -11,6 +11,8 @@ import NotFound from './components/NotFound';
 import SchoolDetail from './components/SchoolDetail/SchoolDetail'
 import Admin from './components/Admin/Admin';
 import Verify from './components/Verify/Verify';
+import QRmarkHistory from './components/Admin/QRmarkHistory';
+import UserList from './components/Admin/UserList';
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
 
         <Route exact path="/" element={<RequireAuth allowedRoles={["admin"]} />}>
           <Route exact path="admin" element={<Admin />} />
+          <Route exact path="admin/qrmarks" element={<QRmarkHistory />} />
+          <Route exact path="admin/users" element={<UserList />} />
         </Route>
 
         <Route path="*" element={<NotFound/>}></Route>

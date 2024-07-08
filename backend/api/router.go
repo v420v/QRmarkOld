@@ -36,6 +36,7 @@ func NewRouter(db *sql.DB) *mux.Router {
 	{
 		isAdmin.Use(m.AdminMiddleware)
 		isAdmin.HandleFunc("/qrmark/list", qrmarkController.SelectQrmarkListHandler).Methods(http.MethodGet, http.MethodOptions)
+		isAdmin.HandleFunc("/user/list", userController.SelectUserListHandler).Methods(http.MethodGet, http.MethodOptions)
 	}
 
 	isAuthenticated := r.PathPrefix("/").Subrouter()
