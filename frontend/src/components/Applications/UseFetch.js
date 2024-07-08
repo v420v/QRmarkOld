@@ -1,13 +1,10 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import axios from "../../api/axios";
-import SessionContext from '../../context/SessionProvider';
 
 const UseFetch = (url, dep = []) => {
   const [data, setData] = useState(null);
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState(null);
-
-  const [session, setSession] = useContext(SessionContext);
 
     useEffect(() => {
         setIsPending(true);
@@ -15,7 +12,8 @@ const UseFetch = (url, dep = []) => {
         setTimeout(async() => {
             try {
                 const response = await axios.get(url, {
-                    headers: { 'Authorization': `Bearer ${session}`,'Content-Type': 'text/plain; charset=utf-8' },
+                    headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+                    withCredentials: true,
                 });
                 setData(response.data);
             } catch (err) {

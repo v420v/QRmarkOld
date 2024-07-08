@@ -1,10 +1,9 @@
 import { QrReader } from '@cmdnio/react-qr-reader';
 
 import { useNavigate, useLocation } from 'react-router-dom';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import axios from '../../api/axios';
 import Header from '../Applications/Header';
-import SessionContext from '../../context/SessionProvider';
 
 const Qrmark = () => {
     const [isPending, setIsPending] = useState(false);
@@ -13,8 +12,6 @@ const Qrmark = () => {
     const navigate = useNavigate();
     let location = useLocation();
     const from = location.state?.form?.pathname || "/";
-
-    const [session, ] = useContext(SessionContext);
 
     const handleRetry = () => {
         setError(null);
@@ -46,7 +43,7 @@ const Qrmark = () => {
                                                     "jwt": result.text
                                                 }),
                                                 {
-                                                    headers: { 'Authorization': `Bearer ${session}`, 'Content-Type': 'text/plain; charset=utf-8' }
+                                                    headers: { 'Content-Type': 'text/plain; charset=utf-8' }
                                                      
                                                 }
                                             );

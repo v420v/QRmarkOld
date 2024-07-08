@@ -1,15 +1,13 @@
 import { useContext, useEffect, useState } from "react";
-import { useLocation, Navigate, Outlet, useNavigate } from "react-router-dom";
+import { useLocation, Navigate, Outlet } from "react-router-dom";
 import axios from "../../api/axios";
 import React from "react";
 import CurrentUserContext from "../../context/AuthProvider";
-import SessionContext from "../../context/SessionProvider";
 
 const RequireAuth = ({ allowedRoles }) => {
   const [isPending, setIsPending] = useState(true);
   const location = useLocation();
   const [CurrentUser, setCurrentUser] = useContext(CurrentUserContext);
-  const [session, setSession] = useContext(SessionContext);
 
   useEffect(() => {
     setIsPending(true);
@@ -17,12 +15,14 @@ const RequireAuth = ({ allowedRoles }) => {
       try {
         const response = await axios.get("/user/current",
           {
-            headers: {'Authorization': `Bearer ${session}`,'Content-Type': 'text/plain; charset=utf-8'}
+            headers: {
+              'Content-Type': 'text/plain; charset=utf-8',
+            },
+            withCredentials: true
           }
         );
         setCurrentUser(response.data);
       } catch (err) {
-        setSession(null);
         setCurrentUser(null);
       } finally {
         setIsPending(false);

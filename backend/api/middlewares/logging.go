@@ -52,6 +52,7 @@ func (m *QrmarkAPIMiddleware) LoggingMiddleware(next http.Handler) http.Handler 
 		}
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, X-Auth-Token, Origin, Authorization")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("AllowCredentials", "true")
 
 		traceID := newTraceID()
 

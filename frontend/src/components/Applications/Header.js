@@ -2,21 +2,17 @@ import { Link } from 'react-router-dom';
 import { useContext } from "react";
 import CurrentUserContext from "../../context/AuthProvider";
 import { Menu, MenuButton, IconButton, MenuList, MenuItem, Button } from '@chakra-ui/react';
-import SessionContext from '../../context/SessionProvider';
 import { useNavigate } from 'react-router-dom';
 
 import {HamburgerIcon} from "@chakra-ui/icons"
 
 const Header = () => {
-    const [CurrentUser] = useContext(CurrentUserContext);
+    const [CurrentUser, setCurrentUser] = useContext(CurrentUserContext);
 
-    const [, setSession] = useContext(SessionContext);
-    const [, setCurrentUser] = useContext(CurrentUserContext);
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
-        setSession(null);
-        setCurrentUser(null);
+      setCurrentUser(null);
     }
 
     return (

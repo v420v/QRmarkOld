@@ -112,6 +112,16 @@ func (c *UserController) LoginHandler(w http.ResponseWriter, req *http.Request) 
 		return
 	}
 
+	cookie := &http.Cookie{
+		Name:     "token",
+		Value:    signedToken,
+		Expires:  time.Now().Add(60 * time.Minute),
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+	}
+
+	http.SetCookie(w, cookie)
+
 	json.NewEncoder(w).Encode(signedToken)
 
 	w.WriteHeader(http.StatusOK)

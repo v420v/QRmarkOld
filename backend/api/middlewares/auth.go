@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -40,18 +39,20 @@ func loadRSAPublicKey() (*rsa.PublicKey, error) {
 
 func (m *QrmarkAPIMiddleware) AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		authorization := req.Header.Get("Authorization")
-
-		authHeaders := strings.Split(authorization, " ")
-		if len(authHeaders) != 2 {
-			err := apierrors.RequiredAuthorization.Wrap(errors.New("invalid req header"), "invalid header")
+		cookie, err := req.Cookie("token")
+		fmt.Println(cookie)
+		fmt.Println(cookie.Value)
+		if err != nil {
+			err = apierrors.RequiredAuthorization.Wrap(err, "invalid cookie")
 			apierrors.ErrorHandler(w, req, err)
 			return
 		}
 
-		bearer, idToken := authHeaders[0], authHeaders[1]
+		authorization := cookie.Value
 
-		if bearer != "Bearer" || idToken == "" {
+		idToken := authorization
+
+		if idToken == "" {
 			err := apierrors.RequiredAuthorization.Wrap(errors.New("invalid req header"), "invalid header")
 			apierrors.ErrorHandler(w, req, err)
 			return
@@ -111,18 +112,18 @@ func (m *QrmarkAPIMiddleware) AuthMiddleware(next http.Handler) http.Handler {
 
 func (m *QrmarkAPIMiddleware) AdminMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		authorization := req.Header.Get("Authorization")
-
-		authHeaders := strings.Split(authorization, " ")
-		if len(authHeaders) != 2 {
-			err := apierrors.RequiredAuthorization.Wrap(errors.New("invalid req header"), "invalid header")
+		cookie, err := req.Cookie("token")
+		if err != nil {
+			err = apierrors.RequiredAuthorization.Wrap(err, "invalid cookie")
 			apierrors.ErrorHandler(w, req, err)
 			return
 		}
 
-		bearer, idToken := authHeaders[0], authHeaders[1]
+		authorization := cookie.Value
 
-		if bearer != "Bearer" || idToken == "" {
+		idToken := authorization
+
+		if idToken == "" {
 			err := apierrors.RequiredAuthorization.Wrap(errors.New("invalid req header"), "invalid header")
 			apierrors.ErrorHandler(w, req, err)
 			return

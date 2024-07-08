@@ -1,7 +1,6 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import axios from '../../api/axios';
-import SessionContext from '../../context/SessionProvider';
 import PasswordInput from "../Applications/Password"
 import {FormControl, FormLabel, Input, Button} from "@chakra-ui/react"
 import Header from '../Applications/Header';
@@ -15,8 +14,6 @@ const Login = () => {
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
 
-    const [, setSession] = useContext(SessionContext);
-
     const [loginIsPending, setLoginIsPending] = useState(false);
 
     const handleSubmit = async (e) => {
@@ -24,18 +21,18 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post("/login",
+            await axios.post("/login",
                 JSON.stringify({
                     "email": email,
                     "password": pwd
                 }),
                 {
-                    headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+                    headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+                    withCredentials: true,
                 }
             );
             setEmail('');
             setPwd('');
-            setSession(response.data);
 
             setLoginIsPending(false);
             navigate(from, {replace: true});
