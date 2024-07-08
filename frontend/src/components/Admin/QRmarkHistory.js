@@ -31,7 +31,7 @@ const QRmarkHistory = () => {
                 <div className="admin-panel-middle">
                     <h2>QRmark</h2>
                     <hr></hr>
-                    {data && data.qrmarks.length > 1 && 
+                    {data && data.qrmarks.length > 0 && 
                     <TableContainer>
                         <Table size={['sm']}>
                             <Thead>

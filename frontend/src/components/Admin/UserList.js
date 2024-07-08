@@ -32,7 +32,7 @@ const UserList = () => {
                 <div className="admin-panel-middle">
                     <h2>ユーザー</h2>
                     <hr></hr>
-                    {data && data.users.length > 1 && 
+                    {data && data.users.length > 0 && 
                     <TableContainer>
                         <Table size={['sm']}>
                             <Thead>
