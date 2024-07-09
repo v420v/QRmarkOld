@@ -1,6 +1,8 @@
 # QRコード型ベルマーク「QRmark」
 
-<a href="https://ibukiqrmark.com">QRmark アプリへのリンク</a>
+<a href="https://ibukiqrmark.com">**QRmark アプリへのリンク**</a>
+
+<a href="https://github.com/v420v/QRmarkQRcode">**QRmark で使えるQRコードはこちら**</a>
 
 もしベルマークがQRコードだったら...って思い作りました。
 
