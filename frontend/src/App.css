@@ -279,15 +279,16 @@ header {
 .about-container {
   display: flex;
   justify-content: space-around;
+  align-items: center;
   flex-direction: column;
-  padding: 80px 30px;
+  padding: 0px 30px;
   max-width: 1200px;
   margin: 0 auto;
   height: 80vh;
 }
 
 .about-container h1{
-  font-size: min(9vw, 130px);
+  font-size: min(8.5vw, 120px);
   line-height: min(12vw, 170px);
   font-weight: 900;
   text-align: center;

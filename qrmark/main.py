@@ -52,10 +52,12 @@ def main():
     if private_key is None:
         return
 
-    id = 1
+    id = 301
 
     for n in qrmark_number:
-        for i in range(10):
+        if not os.path.isdir(f"images/qrmark-number-{n}"):
+            os.mkdir(f"images/qrmark-number-{n}")
+        for i in range(30):
             token, err = generate_jwt_with_ecdsa_signature(private_key, id, n)
 
             if err:
@@ -73,7 +75,7 @@ def main():
                 eye_drawer=RoundedModuleDrawer(),
                 color_mask=SolidFillColorMask(front_color=(0, 0, 0))
             )
-            img.save(f"images/qrmark-{n}-{i}-{id}.png")
+            img.save(f"images/qrmark-number-{n}/qrmark-{n}-{i}-{id}.png")
 
             id += 1
 
