@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from "moment/moment";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { Button, TableContainer, Table, Thead, Tr, Th, Td, Tbody, Stack, Skeleton } from '@chakra-ui/react'
+import { Button, TableContainer, Table, Thead, Tr, Th, Td, Tbody } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom';
 
 const TotalPoints = () => {
@@ -30,7 +30,7 @@ const TotalPoints = () => {
 const Home = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [CurrentUser, ] = useContext(CurrentUserContext);
-  const {error: historyError, isPending: historyIsPending, data: historyData} = UseFetch(`/user/${CurrentUser.user_id}/qrmark/list?page=${pageNumber}`, [pageNumber])
+  const {error: historyError, isPending: historyIsPending, data: historyData} = UseFetch(`/qrmark/list?page=${pageNumber}&user=${CurrentUser.user_id}`, [pageNumber])
   const navigate = useNavigate();
   Moment.locale('ja');
 

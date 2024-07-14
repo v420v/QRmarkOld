@@ -35,14 +35,13 @@ func NewRouter(db *sql.DB) *mux.Router {
 	isAdmin := r.PathPrefix("/").Subrouter()
 	{
 		isAdmin.Use(m.AdminMiddleware)
-		isAdmin.HandleFunc("/qrmark/list", qrmarkController.SelectQrmarkListHandler).Methods(http.MethodGet, http.MethodOptions)
 		isAdmin.HandleFunc("/user/list", userController.SelectUserListHandler).Methods(http.MethodGet, http.MethodOptions)
 	}
 
 	isAuthenticated := r.PathPrefix("/").Subrouter()
 	{
 		isAuthenticated.Use(m.AuthMiddleware)
-		isAuthenticated.HandleFunc("/user/{id:[0-9]+}/qrmark/list", qrmarkController.SelectUserQrmarkListHandler).Methods(http.MethodGet, http.MethodOptions)
+		isAuthenticated.HandleFunc("/qrmark/list", qrmarkController.SelectQrmarkListHandler).Methods(http.MethodGet, http.MethodOptions)
 		isAuthenticated.HandleFunc("/user/current", userController.CurrentUserHandler).Methods(http.MethodGet, http.MethodOptions)
 		isAuthenticated.HandleFunc("/qrmark", qrmarkController.QrmarkHandler).Methods(http.MethodPost, http.MethodOptions)
 	}

@@ -117,7 +117,7 @@ header {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  padding: 30px 10px;
+  padding: 30px 10px 120px 10px;
   gap: 20px;
   flex-direction: column;
 }
@@ -128,25 +128,8 @@ header {
 }
 
 .admin-dashboard-links {
-  flex-direction: column;
   display: flex;
   gap: 30px;
-}
-
-.admin-panel-container {
-  display: flex;
-  justify-content: center;
-  max-width: 1200px;
-  margin: 0 auto;
-  min-height: 100vh;
-  padding: 30px 10px;
-}
-
-.admin-panel-middle {
-  width: 100%;
-  display: flex;
-  gap: 10px;
-  flex-direction: column;
 }
 
 .register-container {

@@ -110,38 +110,6 @@ func verifyJWTWithECDSASignature(publicKey *ecdsa.PublicKey, tokenString string)
 	return token, nil
 }
 
-func (c *QrmarkController) SelectUserQrmarkListHandler(w http.ResponseWriter, req *http.Request) {
-	userID, err := strconv.Atoi(mux.Vars(req)["id"])
-	if err != nil {
-		apierrors.ErrorHandler(w, req, err)
-		return
-	}
-
-	var page int = 0
-
-	queryMap := req.URL.Query()
-
-	if p, ok := queryMap["page"]; ok && len(p) > 0 {
-		var err error
-		page, err = strconv.Atoi(p[0])
-		if err != nil {
-			err = apierrors.BadParam.Wrap(err, "page in query param must be number")
-			apierrors.ErrorHandler(w, req, err)
-			return
-		}
-	} else {
-		page = 1
-	}
-
-	qrmarkList, err := c.service.SelectUserQrmarkListService(userID, page)
-	if err != nil {
-		apierrors.ErrorHandler(w, req, err)
-		return
-	}
-
-	json.NewEncoder(w).Encode(qrmarkList)
-}
-
 func (c *QrmarkController) SelectQrmarkListHandler(w http.ResponseWriter, req *http.Request) {
 	var page int = 0
 
@@ -159,7 +127,22 @@ func (c *QrmarkController) SelectQrmarkListHandler(w http.ResponseWriter, req *h
 		page = 1
 	}
 
-	qrmarkList, err := c.service.SelectQrmarkListService(page)
+	var err error = nil
+	var qrmarkList models.QrmarkList
+
+	if p, ok := queryMap["user"]; ok && len(p) > 0 {
+		var err error
+		userID, err := strconv.Atoi(p[0])
+		if err != nil {
+			err = apierrors.BadParam.Wrap(err, "page in query param must be number")
+			apierrors.ErrorHandler(w, req, err)
+			return
+		}
+		qrmarkList, err = c.service.SelectUserQrmarkListService(userID, page)
+	} else {
+		qrmarkList, err = c.service.SelectQrmarkListService(page)
+	}
+
 	if err != nil {
 		apierrors.ErrorHandler(w, req, err)
 		return
