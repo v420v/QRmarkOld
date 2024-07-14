@@ -16,7 +16,7 @@ const Admin = () => {
                     QRmark履歴
                 </Link>
                 <Link className="">
-                    その他
+                    学校を追加
                 </Link>
             </div>
         </div>
