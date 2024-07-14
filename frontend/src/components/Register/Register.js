@@ -138,8 +138,9 @@ const Register = () => {
             <>
             <div className="register-container">
                 <div className="register-success-message">
-                    <h3>{verifyingEmail}</h3>
-                    <p>に認証リンクを送りました。</p>
+                    <h2>メールを検証する</h2>
+                    <br></br>
+                    <p>{verifyingEmail}宛に認証リンクを送りました。</p>
                 </div>
             </div>
             </>
