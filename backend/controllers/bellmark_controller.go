@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"os"
 	"strconv"
-	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/gorilla/mux"
@@ -27,22 +26,6 @@ type QrmarkController struct {
 
 func NewQrmarkController(service services.QrmarkServicer) *QrmarkController {
 	return &QrmarkController{service: service}
-}
-
-func (c *QrmarkController) SelectSchoolTotalPointsHandler(w http.ResponseWriter, req *http.Request) {
-	userID, err := strconv.Atoi(mux.Vars(req)["id"])
-	if err != nil {
-		apierrors.ErrorHandler(w, req, err)
-		return
-	}
-
-	userTotalPoints, err := c.service.SelectSchoolTotalPointsService(userID)
-	if err != nil {
-		apierrors.ErrorHandler(w, req, err)
-		return
-	}
-
-	json.NewEncoder(w).Encode(userTotalPoints)
 }
 
 func (c *QrmarkController) SelectUserTotalPointsHandler(w http.ResponseWriter, req *http.Request) {
@@ -68,34 +51,7 @@ func (c *QrmarkController) SelectSchoolPointsHandler(w http.ResponseWriter, req 
 		return
 	}
 
-	queryMap := req.URL.Query()
-	var year, month int
-
-	if p, ok := queryMap["year"]; ok && len(p) > 0 {
-		var err error
-		year, err = strconv.Atoi(p[0])
-		if err != nil {
-			err = apierrors.BadParam.Wrap(err, "year in query param must be number")
-			apierrors.ErrorHandler(w, req, err)
-			return
-		}
-	} else {
-		year = int(time.Now().Year())
-	}
-
-	if p, ok := queryMap["month"]; ok && len(p) > 0 {
-		var err error
-		month, err = strconv.Atoi(p[0])
-		if err != nil {
-			err = apierrors.BadParam.Wrap(err, "month in query param must be number")
-			apierrors.ErrorHandler(w, req, err)
-			return
-		}
-	} else {
-		month = int(time.Now().Month())
-	}
-
-	schoolPoints, err := c.service.SelectSchoolPointsService(schoolID, year, month)
+	schoolPoints, err := c.service.SelectSchoolPointsService(schoolID)
 	if err != nil {
 		apierrors.ErrorHandler(w, req, err)
 		return
@@ -259,7 +215,7 @@ func (c *QrmarkController) QrmarkHandler(w http.ResponseWriter, req *http.Reques
 		Point:     int(qrmarkPoint),
 	}
 
-	err = c.service.UseQrmarkService(qrmarkInfo)
+	err = c.service.InsertQrmarkService(qrmarkInfo)
 	if err != nil {
 		apierrors.ErrorHandler(w, req, err)
 		return

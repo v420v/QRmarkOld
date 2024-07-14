@@ -13,12 +13,9 @@ services:
 
     mysql:
         platform: linux/x86_64
-        image: mysql:5.7
+        image: mysql:8.0
         container_name: db-for-qrmarkapi
-        command:
-            - --character-set-server=utf8mb4
-            - --collation-server=utf8mb4_unicode_ci
-            - --sql-mode=ONLY_FULL_GROUP_BY,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+        command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --sql-mode=ONLY_FULL_GROUP_BY,NO_ENGINE_SUBSTITUTION
         environment:
             MYSQL_ROOT_USER: ${MYSQL_ROOT_USER}
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}

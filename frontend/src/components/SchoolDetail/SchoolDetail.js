@@ -3,36 +3,13 @@ import Header from "../Applications/Header";
 import UseFetch from "../Applications/UseFetch";
 import * as XLSX from 'xlsx';
 import { useState } from "react";
-import { TableContainer, Table, Thead, Tr, Th, Td, Tbody, Input, Button } from '@chakra-ui/react'
+import { TableContainer, Table, Thead, Tr, Th, Td, Tbody, Button } from '@chakra-ui/react'
 
 const SchoolDetail = () => {
     const { id } = useParams();
 
-    const getCurrentYearMonth = () => {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        return `${year}-${month}`;
-    };
-
-    const [date, setDate] = useState(getCurrentYearMonth());
-
-    const handleDateChange = (event) => {
-        setDate(event.target.value);
-    };
-
-    const extractYearAndMonth = (date) => {
-        if (date) {
-            const [year, month] = date.split('-');
-            return { year, month };
-        }
-        return { year: '', month: '' };
-    };
-
-    const { year, month } = extractYearAndMonth(date);
-
     const {error: schoolDetailError, data: schoolDetail, } = UseFetch(`/school/${id}`)
-    const {error: schoolPointsError, isPending: schoolPointsIsPending, data: schoolPoints} = UseFetch(`/school/${id}/points?month=${month}&year=${year}`, [month, year]);
+    const {error: schoolPointsError, isPending: schoolPointsIsPending, data: schoolPoints} = UseFetch(`/school/${id}/points`);
 
     const [downloadIsPending, setDownloadIsPending] = useState(false);
 
@@ -66,21 +43,20 @@ const SchoolDetail = () => {
                 <div className="school-detail-middle">
                     <h2>{schoolDetail && schoolDetail.name}</h2>
                     <hr></hr>
-                    <Input size={['sm']} type="month" value={date} onChange={handleDateChange} />
                     {schoolPoints && schoolPoints.length > 1 && 
                     <TableContainer>
-                        <Table size={['sm']}>
+                        <Table id="table" size={['sm']}>
                             <Thead>
                               <Tr>
-                                <Th>企業名</Th>
-                                <Th isNumeric>ポイント</Th>
+                                <Th id="th-company">企業名</Th>
+                                <Th isNumeric id="th-point">ポイント</Th>
                               </Tr>
                             </Thead>
                             <Tbody>
                                 {schoolPoints.map((ssp, index) => (
                                     <Tr key={index}>
-                                        <Td>{ssp.company.name}</Td>
-                                        <Td isNumeric>{ssp.points}</Td>
+                                        <Td className="td-company-name">{ssp.company.name}</Td>
+                                        <Td className="td-point" isNumeric>{ssp.points}</Td>
                                     </Tr>
                                 ))}
                             </Tbody>

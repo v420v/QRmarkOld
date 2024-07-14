@@ -28,22 +28,19 @@ const UserList = () => {
     return (
         <section>
             <Header/>
-            <div className="admin-panel-container">
-                <div className="admin-panel-middle">
+            <div className="admin-container">
                     <h2>ユーザー</h2>
                     <hr></hr>
                     {data && data.users.length > 0 && 
                     <TableContainer>
-                        <Table size={['sm']}>
+                        <Table size={['sm', 'md']}>
                             <Thead>
                               <Tr>
-                                <Th scope="col">ユーザーID</Th>
+                                <Th scope="col">ID</Th>
                                 <Th scope="col">名前</Th>
-                                <Th scope="col">メールアドレス</Th>
-                                <Th scope="col">権限</Th>
                                 <Th scope="col">認証済</Th>
-                                <Th scope="col">登録学校</Th>
                                 <Th scope="col">時間</Th>
+                                <Th scope="col">詳細</Th>
                               </Tr>
                             </Thead>
                             <Tbody>
@@ -51,11 +48,9 @@ const UserList = () => {
                                 <Tr key={index}>
                                     <Td>{user.user_id}</Td>
                                     <Td>{user.name}</Td>
-                                    <Td>{user.email}</Td>
-                                    <Td>{user.role}</Td>
                                     <Td>{user.verified ? "はい" : "いいえ"}</Td>
-                                    <Td><Link to={`/school/${user.school.school_id}`}>{user.school.name}</Link></Td>
-                                    <Td>{moment(user.created_at).format('YYYY/M/D H:m:s')}</Td>
+                                    <Td>{moment(user.created_at).format('YYYY/M/D')}</Td>
+                                    <Td><Link to={`/admin/user/${user.user_id}`}>詳細</Link></Td>
                                 </Tr>
                                 ))}
                             </Tbody>
@@ -68,7 +63,6 @@ const UserList = () => {
                           <Button size='sm' isDisabled={isPending || !data.has_next} onClick={incrementPageNumber}><Icon as={ArrowForwardIcon}/></Button>
                         </div>
                     }
-                </div>
             </div>
         </section>
     );

@@ -125,17 +125,32 @@ func SelectUserByEmail(db *sql.DB, email string) (models.User, error) {
 	return user, nil
 }
 
-func SelectUserDetail(db *sql.DB, userID int) (models.User, error) {
-	var user models.User
+func SelectUserDetail(db *sql.DB, userID int) (models.UserRes, error) {
+	var user models.UserRes
 
 	const sqlStr = `
-	select user_id, name, email, role, school_id, verified, created_at from users where user_id = ?;
+	select 
+	    u.user_id, 
+	    u.name, 
+	    u.email, 
+	    u.role, 
+	    s.school_id,
+		s.name,
+		s.created_at,
+	    u.verified, 
+	    u.created_at
+	from 
+	    users u
+	inner join 
+	    schools s on u.school_id = s.school_id
+	where 
+	    u.user_id = ?;
 	`
 
 	row := db.QueryRow(sqlStr, userID)
 
 	if err := row.Err(); err != nil {
-		return models.User{}, err
+		return models.UserRes{}, err
 	}
 
 	err := row.Scan(
@@ -143,12 +158,14 @@ func SelectUserDetail(db *sql.DB, userID int) (models.User, error) {
 		&user.Name,
 		&user.Email,
 		&user.Role,
-		&user.SchoolID,
+		&user.School.ID,
+		&user.School.Name,
+		&user.School.CreatedAt,
 		&user.Verified,
 		&user.CreatedAt,
 	)
 	if err != nil {
-		return models.User{}, err
+		return models.UserRes{}, err
 	}
 
 	return user, nil

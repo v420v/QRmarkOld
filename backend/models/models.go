@@ -7,9 +7,8 @@ type TotalPoints struct {
 }
 
 type StaticPoint struct {
-	Company          Company   `json:"company"`
-	Points           int       `json:"points"`
-	CreatedYearMonth time.Time `json:"created_year_month"`
+	Company Company `json:"company"`
+	Points  int     `json:"points"`
 }
 
 type QrmarkInfo struct {

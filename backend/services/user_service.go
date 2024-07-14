@@ -36,15 +36,15 @@ func (s *QrmarkAPIService) InsertUserService(user models.User) (models.User, err
 	return newUser, nil
 }
 
-func (s *QrmarkAPIService) SelectUserByIDService(userID int) (models.User, error) {
+func (s *QrmarkAPIService) SelectUserByIDService(userID int) (models.UserRes, error) {
 	user, err := repositories.SelectUserDetail(s.DB, userID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			err = apierrors.NAData.Wrap(err, "no data")
-			return models.User{}, err
+			return models.UserRes{}, err
 		}
 		err = apierrors.GetDataFailed.Wrap(err, "fail to get data")
-		return models.User{}, err
+		return models.UserRes{}, err
 	}
 
 	return user, nil

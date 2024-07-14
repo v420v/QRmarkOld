@@ -42,6 +42,7 @@ const Header = () => {
                 aria-label='Options'
                 icon={<HamburgerIcon />}
                 variant='outline'
+                size={['sm', 'md']}
               />
               <MenuList>
                 <Link to={`/`}>
@@ -49,7 +50,7 @@ const Header = () => {
                       ホーム
                     </MenuItem>
                 </Link>
-                <Link to={`/school/${CurrentUser.school_id}`}>
+                <Link to={`/school/${CurrentUser.school.school_id}`}>
                     <MenuItem>
                       支援してる学校
                     </MenuItem>

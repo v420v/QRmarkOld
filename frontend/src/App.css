@@ -13,6 +13,11 @@ hr {
   padding-bottom: 10px;
 }
 
+td a {
+  color: #e5ad15;
+  font-weight: 600;
+}
+
 button {
   -moz-box-sizing: border-box !important;
   box-sizing: border-box !important;
@@ -101,50 +106,31 @@ header {
 .school-detail-middle {
   flex: 1;
   display: flex;
+  width: 100%;
   gap: 10px;
   flex-direction: column;
 }
 
-.admin-dashboard-container {
+.admin-container {
   display: flex;
   justify-content: center;
-  flex-direction: column;
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 30px 10px;
   gap: 20px;
-}
-
-.admin-dashboard {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  align-items: flex-start;
-}
-
-.admin-dashboard-middle {
-  display: flex;
   flex-direction: column;
-  flex: 1;
 }
 
-.admin-dashboard-left {
-  display: flex;
+.admin-user-detail-school a{
+  color: #e5ad15;
+  font-weight: 600;
+}
+
+.admin-dashboard-links {
   flex-direction: column;
-  flex-basis: 30%;
-}
-
-@media screen and (max-width: 800px) {
-  .admin-dashboard {
-    flex-direction: column;
-  }
-  .admin-dashboard-middle {
-    width: 100%;
-  }
-  .admin-dashboard-left {
-    width: 100%;
-    flex-basis: 100%;
-  }
+  display: flex;
+  gap: 30px;
 }
 
 .admin-panel-container {

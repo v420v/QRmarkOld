@@ -7,25 +7,7 @@ import (
 	"github.com/v420v/qrmarkapi/models"
 )
 
-func SelectSchoolTotalPoints(db *sql.DB, schoolID int) (models.TotalPoints, error) {
-	row := db.QueryRow(`SELECT s.name AS name, SUM(ssp.points) AS total_points FROM school_static_points ssp JOIN school s ON ssp.school_id = s.id WHERE s.id = ? and ssp.created_year_month = ?;`, schoolID)
-
-	if err := row.Err(); err != nil {
-		return models.TotalPoints{}, err
-	}
-
-	stp := models.TotalPoints{}
-
-	totalPoints := 0
-
-	err := row.Scan(&stp.Points)
-	if err != nil {
-		return models.TotalPoints{Points: totalPoints}, nil
-	}
-
-	return models.TotalPoints{Points: totalPoints}, nil
-}
-
+// TODO: add user total_points snapshot table
 func SelectUserTotalPoints(db *sql.DB, userID int) (models.TotalPoints, error) {
 	row := db.QueryRow(`SELECT SUM(points) FROM qrmarks WHERE user_id = ?;`, userID)
 
@@ -43,8 +25,46 @@ func SelectUserTotalPoints(db *sql.DB, userID int) (models.TotalPoints, error) {
 	return models.TotalPoints{Points: totalPoints}, nil
 }
 
-func SelectSchoolPoints(db *sql.DB, schoolID int, year_month_date time.Time) ([]models.StaticPoint, error) {
-	rows, err := db.Query(`SELECT c.company_id, c.name, c.created_at, ssp.points, ssp.created_year_month FROM school_static_points ssp INNER JOIN companys c ON ssp.company_id = c.company_id WHERE ssp.school_id = ? and ssp.created_year_month = ?;`, schoolID, year_month_date)
+func SelectSchoolPoints(db *sql.DB, schoolID int) ([]models.StaticPoint, error) {
+	sql := `
+	SELECT
+	    combined.company_id,
+	    c.name as company_name,
+	    c.created_at as company_created_at,
+	    sum(combined.total_points) as total_points
+	FROM (
+	    SELECT
+	        school_id,
+	        company_id,
+	        total_points
+	    FROM
+	        qrmark_snapshots
+	    WHERE
+	        school_id = ?
+	        AND snapshot_date = (SELECT max(snapshot_date) from qrmark_snapshots WHERE school_id = ?)
+	    UNION ALL
+	    SELECT
+	        school_id,
+	        company_id,
+	        sum(points) as total_points
+	    from
+	        qrmarks
+	    where
+	        school_id = ?
+	        AND created_at > coalesce((select max(snapshot_date) from qrmark_snapshots WHERE school_id = ?), '1970-01-01')
+	    GROUP BY
+	        school_id, company_id
+	) as combined
+	INNER JOIN
+	    companys c on combined.company_id = c.company_id
+	GROUP BY
+	    combined.school_id, combined.company_id
+	ORDER BY
+	    combined.company_id;
+	`
+
+	rows, err := db.Query(sql, schoolID, schoolID, schoolID, schoolID)
+
 	if err != nil {
 		return []models.StaticPoint{}, err
 	}
@@ -53,7 +73,7 @@ func SelectSchoolPoints(db *sql.DB, schoolID int, year_month_date time.Time) ([]
 
 	for rows.Next() {
 		ssp := models.StaticPoint{}
-		rows.Scan(&ssp.Company.ID, &ssp.Company.Name, &ssp.Company.CreatedAt, &ssp.Points, &ssp.CreatedYearMonth)
+		rows.Scan(&ssp.Company.ID, &ssp.Company.Name, &ssp.Company.CreatedAt, &ssp.Points)
 		list = append(list, ssp)
 	}
 
@@ -61,7 +81,28 @@ func SelectSchoolPoints(db *sql.DB, schoolID int, year_month_date time.Time) ([]
 }
 
 func SelectUserQrmarkList(db *sql.DB, userID int, page int) ([]models.Qrmark, bool, error) {
-	sqlStr := `SELECT b.qrmark_id, b.user_id, s.name AS school_name, c.name AS company_name, b.points, b.created_at FROM qrmarks b JOIN schools s ON b.school_id = s.school_id JOIN companys c ON b.company_id = c.company_id where user_id = ? order by created_at desc LIMIT ? OFFSET ?;`
+	sqlStr := `
+	SELECT
+		b.qrmark_id,
+		b.user_id,
+		s.name AS school_name,
+		c.name AS company_name,
+		b.points,
+		b.created_at
+	FROM
+		qrmarks b
+	JOIN
+		schools s
+	ON
+		b.school_id = s.school_id
+	JOIN
+		companys c
+	ON
+		b.company_id = c.company_id
+	WHERE
+		user_id = ?
+	ORDER BY
+		created_at DESC LIMIT ? OFFSET ?;`
 
 	limit := 10
 	hasNext := false
@@ -96,7 +137,26 @@ func SelectUserQrmarkList(db *sql.DB, userID int, page int) ([]models.Qrmark, bo
 }
 
 func SelectQrmarkList(db *sql.DB, page int) ([]models.Qrmark, bool, error) {
-	sqlStr := `SELECT b.qrmark_id, b.user_id, s.name AS school_name, c.name AS company_name, b.points, b.created_at FROM qrmarks b JOIN schools s ON b.school_id = s.school_id JOIN companys c ON b.company_id = c.company_id order by created_at desc LIMIT ? OFFSET ?;`
+	sqlStr := `
+	SELECT
+		b.qrmark_id,
+		b.user_id,
+		s.name AS school_name,
+		c.name AS company_name,
+		b.points,
+		b.created_at
+	FROM
+		qrmarks b
+	JOIN
+		schools s
+	ON
+		b.school_id = s.school_id
+	JOIN
+		companys c
+	ON
+		b.company_id = c.company_id
+	ORDER BY
+		created_at DESC LIMIT ? OFFSET ?;`
 
 	limit := 10
 	hasNext := false
@@ -130,43 +190,14 @@ func SelectQrmarkList(db *sql.DB, page int) ([]models.Qrmark, bool, error) {
 	return QrmarkList, hasNext, nil
 }
 
-func UseQrmark(db *sql.DB, qrmarkInfo models.QrmarkInfo) error {
+func InsertQrmark(db *sql.DB, qrmarkInfo models.QrmarkInfo) error {
+	sql := `INSERT INTO qrmarks (qrmark_id, user_id, school_id, company_id, points, created_at) values (?, ?, (SELECT school_id FROM users WHERE user_id = ?), ?, ?, ?);`
+
 	now := time.Now()
-	year_month := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, now.Location())
 
-	tx, err := db.Begin()
-	if err != nil {
-		return err
-	}
-
-	// school_static_points
-	_, err = tx.Exec(
-		`insert into school_static_points (school_id, company_id, points, created_year_month) values ((SELECT school_id FROM users WHERE user_id = ?), ?, ?, ?) ON DUPLICATE KEY UPDATE points = points + ?;`,
-		qrmarkInfo.UserID, qrmarkInfo.CompanyID, qrmarkInfo.Point, year_month, qrmarkInfo.Point,
-	)
+	_, err := db.Exec(sql, qrmarkInfo.QrmarkID, qrmarkInfo.UserID, qrmarkInfo.UserID, qrmarkInfo.CompanyID, qrmarkInfo.Point, now)
 
 	if err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	// qrmarks
-	_, err = tx.Exec(
-		`
-		insert into
-		qrmarks (qrmark_id, user_id, school_id, company_id, points, created_at)
-		values (?, ?, (SELECT school_id FROM users WHERE user_id = ?), ?, ?, ?);
-		`,
-		qrmarkInfo.QrmarkID, qrmarkInfo.UserID, qrmarkInfo.UserID, qrmarkInfo.CompanyID, qrmarkInfo.Point, now,
-	)
-
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	if err := tx.Commit(); err != nil {
-		tx.Rollback()
 		return err
 	}
 

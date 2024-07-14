@@ -51,9 +51,9 @@ func NewRouter(db *sql.DB) *mux.Router {
 	r.HandleFunc("/verify/{token:[0-9a-z]+}", userController.VerifyHandler).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/user/{id:[0-9|a-z]+}/total_points", qrmarkController.SelectUserTotalPointsHandler).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/user", userController.InsertUserHandler).Methods(http.MethodPost, http.MethodOptions)
+	r.HandleFunc("/user/{id:[0-9|a-z]+}", userController.SelectUserDetailHandler).Methods(http.MethodGet, http.MethodOptions)
 
 	// School
-	r.HandleFunc("/school/{id:[0-9|a-z]+}/total_points", qrmarkController.SelectSchoolTotalPointsHandler).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/school/{id:[0-9]+}/points", qrmarkController.SelectSchoolPointsHandler).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/school/{id:[0-9]+}", schoolController.SelectSchoolDetailHandler).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/school/list", schoolController.SelectSchoolListHandler).Methods(http.MethodGet, http.MethodOptions)

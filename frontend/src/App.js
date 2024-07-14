@@ -13,6 +13,7 @@ import Admin from './components/Admin/Admin';
 import Verify from './components/Verify/Verify';
 import QRmarkHistory from './components/Admin/QRmarkHistory';
 import UserList from './components/Admin/UserList';
+import UserDetail from './components/Admin/UserDetail';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route exact path="admin" element={<Admin />} />
           <Route exact path="admin/qrmarks" element={<QRmarkHistory />} />
           <Route exact path="admin/users" element={<UserList />} />
+          <Route exact path="admin/user/:id" element={<UserDetail/>} />
         </Route>
 
         <Route path="*" element={<NotFound/>}></Route>
