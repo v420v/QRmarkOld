@@ -129,7 +129,25 @@ header {
 
 .admin-dashboard-links {
   display: flex;
-  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.admin-dashboard-links a{
+  font-size: 25px;
+  color: #e5ad15;
+  font-weight: 600;
+  padding: 20px 30px;
+  border-radius: 35px;
+}
+
+@media screen and (max-width: 900px) {
+  .admin-dashboard-links a{
+    font-size: 25px;
+    color: #e5ad15;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 25px;
+  }
 }
 
 .register-container {

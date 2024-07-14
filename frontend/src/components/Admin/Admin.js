@@ -10,13 +10,19 @@ const Admin = () => {
             <hr></hr>
             <div className="admin-dashboard-links">
                 <Link className="" to={"/admin/users"}>
-                    ユーザー履歴
+                    ユーザー
                 </Link>
                 <Link className="" to={"/admin/qrmarks"}>
-                    QRmark履歴
+                    QRmark
                 </Link>
                 <Link className="">
                     学校を追加
+                </Link>
+                <Link className="">
+                    ユーザーを追加
+                </Link>
+                <Link className="">
+                    その他
                 </Link>
             </div>
         </div>
