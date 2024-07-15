@@ -47,9 +47,9 @@ QRコードには jwtToken が入ってます。署名に使っているアル�
 | ![学校のポイント集計結果画面](https://github.com/v420v/QRmark/assets/106643445/9c0a16f9-030b-4663-80fc-7e0fa2f5b20f) | ![管理者画面](https://github.com/user-attachments/assets/c2cdcd45-b8f5-42a8-81e6-a41afa53a16c)
 | 学校のその月のポイント集計結果が表示されます。ダウンロードも可能。                                                           | 管理者画面の一部                                            |
 
-
 ## ER図
-![sql](https://github.com/v420v/QRmark/assets/106643445/73751f03-fdac-4cc8-bf49-a5dbd0b0a998)
+![sql](https://github.com/user-attachments/assets/f5228e9b-ac35-4140-8142-be9d001bd4db)
+
 
 ## AWS 構成図
 <img width="771" alt="Screenshot 2024-07-04 at 15 48 30" src="https://github.com/v420v/QRmark/assets/106643445/0ed84a76-cda9-4af1-ae63-2fb79f8a82d5">
