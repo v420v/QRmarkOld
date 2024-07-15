@@ -6,9 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"time"
-
-	"math/rand"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
@@ -22,25 +19,6 @@ func connectDB() (*sql.DB, error) {
 	dbName := os.Getenv("DB_NAME")
 
 	return sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true", user, pass, host, dbName))
-}
-
-func AddData(db *sql.DB) {
-	time.Sleep(10)
-	id := 700
-	user_id := 1
-	school_id := 7026
-
-	for i := 0; i < 100000; i++ {
-		company_id := rand.Intn(29) + 1
-		points := 3
-		createdAt := time.Now()
-		_, err := db.Exec(`insert into
-		qrmarks (qrmark_id, user_id, school_id, company_id, points, created_at)
-		values (?, ?, ?, ?, ?, ?);`, id+i, user_id, school_id, company_id, points, createdAt)
-		if err != nil {
-			panic(err)
-		}
-	}
 }
 
 func main() {
@@ -59,8 +37,6 @@ func main() {
 	}
 
 	log.Printf("server start QrmarkAPI at port %s\n", ":"+PORT)
-
-	//AddData(db)
 
 	log.Fatal(http.ListenAndServe(":"+PORT, r))
 }
