@@ -7,63 +7,62 @@ hide circle
 skinparam linetype ortho
 
 entity "schools" as schools {
-  + school_id : integer [PK]
-  --
-  + name : varchar(100)
-  + created_at : datetime
+    + school_id : integer
+    --
+    name : varchar(100)
+    created_at : datetime
 }
 
 entity "users" as users {
-  + user_id : integer [PK]
-  --
-  + name : varchar(100)
-  + email : varchar(100)
-  + password : varchar(100)
-  + role : varchar(100)
-  + school_id : integer [FK]
-  + verified : boolean
-  + created_at : datetime
+    + user_id : integer
+    --
+    name : varchar(100)
+    email : varchar(100)
+    password : varchar(100)
+    role : varchar(100)
+    school_id : integer
+    verified : boolean
+    created_at : datetime
 }
 
 entity "verification_tokens" as verification_tokens {
-  + user_id : integer [FK]
-  --
-  + token : varchar(100)
-  + expired_at : datetime
+    + user_id : integer
+    --
+    token : varchar(100)
+    expired_at : datetime
 }
 
 entity "companys" as companys {
-  + company_id : integer [PK]
-  --
-  + name : varchar(100)
-  + created_at : datetime
+    + company_id : integer
+    --
+    name : varchar(100)
+    created_at : datetime
 }
 
 entity "qrmarks" as qrmarks {
-  + qrmark_id : integer [PK]
-  --
-  + user_id : integer [FK]
-  + school_id : integer [FK]
-  + company_id : integer [FK]
-  + points : integer
-  + created_at : datetime
+    + qrmark_id : integer
+    --
+    user_id : integer
+    school_id : integer
+    company_id : integer
+    points : integer
+    created_at : datetime
 }
 
-entity "school_static_points" as school_static_points {
-  + school_id : integer [FK]
-  + company_id : integer [FK]
-  + total_points : integer
-  + created_year_month : datetime
-  --
-  * (school_id, company_id, created_year_month)
+entity "qrmark_snapshots" as qrmark_snapshots {
+    + snapshot_id : integer
+    --
+    school_id : integer
+    company_id : integer
+    total_points : integer
+    snapshot_date : datetime
 }
 
 schools ||--o{ users : "school_id"
 users ||--o{ verification_tokens : "user_id"
+schools ||--o{ qrmarks : "school_id"
 users ||--o{ qrmarks : "user_id"
 companys ||--o{ qrmarks : "company_id"
-schools ||--o{ qrmarks : "school_id"
-schools ||--o{ school_static_points : "school_id"
-companys ||--o{ school_static_points : "company_id"
-
+schools ||--o{ qrmark_snapshots : "school_id"
+companys ||--o{ qrmark_snapshots : "company_id"
 @enduml
