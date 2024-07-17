@@ -21,7 +21,7 @@ func NewSchoolController(service services.SchoolServicer) *SchoolController {
 	}
 }
 
-func (c *SchoolController) SelectSchoolDetailHandler(w http.ResponseWriter, req *http.Request) {
+func (c *SchoolController) GetSchoolDetailHandler(w http.ResponseWriter, req *http.Request) {
 	schoolID, err := strconv.Atoi(mux.Vars(req)["id"])
 	if err != nil {
 		apierrors.ErrorHandler(w, req, err)
@@ -37,7 +37,7 @@ func (c *SchoolController) SelectSchoolDetailHandler(w http.ResponseWriter, req 
 	json.NewEncoder(w).Encode(school)
 }
 
-func (c *SchoolController) SearchSchoolHandler(w http.ResponseWriter, req *http.Request) {
+func (c *SchoolController) GetSearchSchoolHandler(w http.ResponseWriter, req *http.Request) {
 	var page int = 0
 	var q string = ""
 
@@ -73,7 +73,7 @@ func (c *SchoolController) SearchSchoolHandler(w http.ResponseWriter, req *http.
 	json.NewEncoder(w).Encode(schoolList)
 }
 
-func (c *SchoolController) SelectSchoolListHandler(w http.ResponseWriter, req *http.Request) {
+func (c *SchoolController) GetSchoolListHandler(w http.ResponseWriter, req *http.Request) {
 	page := 0
 	queryMap := req.URL.Query()
 

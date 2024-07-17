@@ -11,10 +11,10 @@ import { MdVerified } from "react-icons/md";
 const UserDetail = () => {
     moment.locale('ja');
     const { id } = useParams();
-    const {error: userDetailError, data: userDetail, } = UseFetch(`/user/${id}`)
+    const {error: userDetailError, data: userDetail, } = UseFetch(`/users/${id}`)
 
     const [pageNumber, setPageNumber] = useState(1);
-    const {error: historyError, isPending: historyIsPending, data: historyData} = UseFetch(`/qrmark/list?page=${pageNumber}&user=${id}`, [pageNumber]);
+    const {error: historyError, isPending: historyIsPending, data: historyData} = UseFetch(`/qrmarks?page=${pageNumber}&user=${id}`, [pageNumber]);
 
     if (userDetailError) {
         return <>{userDetailError.message}</>

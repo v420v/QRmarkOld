@@ -38,7 +38,7 @@ const Qrmark = () => {
                                             return
                                         }
                                         try {
-                                            await axios.post(`/qrmark`,
+                                            await axios.post(`/qrmarks`,
                                                 JSON.stringify({
                                                     "jwt": result.text
                                                 }),

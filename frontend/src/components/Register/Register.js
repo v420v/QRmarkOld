@@ -8,7 +8,6 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FormControl, FormLabel, Input, FormHelperText, Button, useDisclosure, Modal, ModalOverlay, ModalContent, ModalBody,
 } from "@chakra-ui/react"
 import PasswordInput from "../Applications/Password"
-import Header from "../Applications/Header";
 
 const SchoolList = ({setSchoolName, onClose, schoolID, setSchoolID}) => {
     const [pageNumber, setPageNumber] = useState(1);
@@ -27,7 +26,7 @@ const SchoolList = ({setSchoolName, onClose, schoolID, setSchoolID}) => {
             }
             let ignore = false;
             try {
-                const response = await axios.get(`/school/search?q=${schoolQuery}&page=${pageNumber}`, {
+                const response = await axios.get(`/schools/search?q=${schoolQuery}&page=${pageNumber}`, {
                     headers: { 'Content-Type': 'text/plain; charset=utf-8' }
                 });
                 if (!ignore) {

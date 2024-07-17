@@ -36,7 +36,50 @@ func NewUserController(service services.UserServicer) *UserController {
 	}
 }
 
-func loadRSAPrivateKey() (*rsa.PrivateKey, error) {
+func PasswordEncrypt(password string) (string, error) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	return string(hash), err
+}
+
+func GenerateSecureToken(length int) string {
+	b := make([]byte, length)
+	if _, err := rand.Read(b); err != nil {
+		return ""
+	}
+	return hex.EncodeToString(b)
+}
+
+func SendEmail(to, subject, body string) error {
+	const senderEmail = "ibuki420v@gmail.com"
+	const SMTPServer = "smtp.gmail.com"
+	const SMTPPort = "587"
+
+	header := make(map[string]string)
+	header["From"] = senderEmail
+	header["To"] = to
+	header["Subject"] = subject
+	header["MIME-version"] = "1.0"
+	header["Content-Type"] = "text/html; charset=\"UTF-8\""
+
+	message := ""
+	for k, v := range header {
+		message += fmt.Sprintf("%s: %s\r\n", k, v)
+	}
+	message += "\r\n" + body
+
+	_ = godotenv.Load()
+	auth := smtp.PlainAuth("", senderEmail, os.Getenv("GMAIL_APP_PASSWORD"), SMTPServer)
+
+	return smtp.SendMail(
+		SMTPServer+":"+SMTPPort,
+		auth,
+		senderEmail,
+		[]string{to},
+		[]byte(message),
+	)
+}
+
+func LoadRSAPrivateKey() (*rsa.PrivateKey, error) {
 	keyData, err := os.ReadFile("/home/ec2-user/QRmark/keys/private_key.pem")
 	if err != nil {
 		return nil, err
@@ -111,7 +154,7 @@ func (c *UserController) LoginHandler(w http.ResponseWriter, req *http.Request) 
 			"exp":  jwt.NewNumericDate(time.Now().Add(time.Hour)),
 		})
 
-	privateKey, err := loadRSAPrivateKey()
+	privateKey, err := LoadRSAPrivateKey()
 	if err != nil {
 		apierrors.ErrorHandler(w, req, err)
 		return
@@ -135,7 +178,7 @@ func (c *UserController) LoginHandler(w http.ResponseWriter, req *http.Request) 
 	http.SetCookie(w, cookie)
 }
 
-func (c *UserController) CurrentUserHandler(w http.ResponseWriter, req *http.Request) {
+func (c *UserController) GetCurrentUserHandler(w http.ResponseWriter, req *http.Request) {
 	userID, err := common.GetCurrentUserID(req.Context())
 	if err != nil {
 		apierrors.ErrorHandler(w, req, err)
@@ -151,11 +194,6 @@ func (c *UserController) CurrentUserHandler(w http.ResponseWriter, req *http.Req
 	json.NewEncoder(w).Encode(user)
 }
 
-func passwordEncrypt(password string) (string, error) {
-	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	return string(hash), err
-}
-
 func (c *UserController) VerifyHandler(w http.ResponseWriter, req *http.Request) {
 	token := mux.Vars(req)["token"]
 
@@ -168,45 +206,7 @@ func (c *UserController) VerifyHandler(w http.ResponseWriter, req *http.Request)
 	json.NewEncoder(w).Encode("user verified")
 }
 
-func GenerateSecureToken(length int) string {
-	b := make([]byte, length)
-	if _, err := rand.Read(b); err != nil {
-		return ""
-	}
-	return hex.EncodeToString(b)
-}
-
-func sendEmail(to, subject, body string) error {
-	const senderEmail = "ibuki420v@gmail.com"
-	const SMTPServer = "smtp.gmail.com"
-	const SMTPPort = "587"
-
-	header := make(map[string]string)
-	header["From"] = senderEmail
-	header["To"] = to
-	header["Subject"] = subject
-	header["MIME-version"] = "1.0"
-	header["Content-Type"] = "text/html; charset=\"UTF-8\""
-
-	message := ""
-	for k, v := range header {
-		message += fmt.Sprintf("%s: %s\r\n", k, v)
-	}
-	message += "\r\n" + body
-
-	_ = godotenv.Load()
-	auth := smtp.PlainAuth("", senderEmail, os.Getenv("GMAIL_APP_PASSWORD"), SMTPServer)
-
-	return smtp.SendMail(
-		SMTPServer+":"+SMTPPort,
-		auth,
-		senderEmail,
-		[]string{to},
-		[]byte(message),
-	)
-}
-
-func (c *UserController) InsertUserHandler(w http.ResponseWriter, req *http.Request) {
+func (c *UserController) PostUserHandler(w http.ResponseWriter, req *http.Request) {
 	var reqUser models.User
 
 	if err := json.NewDecoder(req.Body).Decode(&reqUser); err != nil {
@@ -215,7 +215,7 @@ func (c *UserController) InsertUserHandler(w http.ResponseWriter, req *http.Requ
 		return
 	}
 
-	hashedPassword, err := passwordEncrypt(reqUser.Password)
+	hashedPassword, err := PasswordEncrypt(reqUser.Password)
 	if err != nil {
 		apierrors.ErrorHandler(w, req, err)
 		return
@@ -259,7 +259,7 @@ func (c *UserController) InsertUserHandler(w http.ResponseWriter, req *http.Requ
         </html>
     `, verification_token.Token)
 
-	err = sendEmail(to, subject, body)
+	err = SendEmail(to, subject, body)
 
 	if err != nil {
 		apierrors.ErrorHandler(w, req, err)
@@ -269,7 +269,7 @@ func (c *UserController) InsertUserHandler(w http.ResponseWriter, req *http.Requ
 	json.NewEncoder(w).Encode(user)
 }
 
-func (c *UserController) SelectUserDetailHandler(w http.ResponseWriter, req *http.Request) {
+func (c *UserController) GetUserDetailHandler(w http.ResponseWriter, req *http.Request) {
 	userID, err := strconv.Atoi(mux.Vars(req)["id"])
 	if err != nil {
 		apierrors.ErrorHandler(w, req, err)
@@ -285,7 +285,7 @@ func (c *UserController) SelectUserDetailHandler(w http.ResponseWriter, req *htt
 	json.NewEncoder(w).Encode(user)
 }
 
-func (c *UserController) SelectUserListHandler(w http.ResponseWriter, req *http.Request) {
+func (c *UserController) GetUserListHandler(w http.ResponseWriter, req *http.Request) {
 	page := 0
 	queryMap := req.URL.Query()
 

@@ -28,7 +28,7 @@ func NewQrmarkController(service services.QrmarkServicer) *QrmarkController {
 	return &QrmarkController{service: service}
 }
 
-func (c *QrmarkController) SelectUserTotalPointsHandler(w http.ResponseWriter, req *http.Request) {
+func (c *QrmarkController) GetUserTotalPointsHandler(w http.ResponseWriter, req *http.Request) {
 	userID, err := strconv.Atoi(mux.Vars(req)["id"])
 	if err != nil {
 		apierrors.ErrorHandler(w, req, err)
@@ -44,7 +44,7 @@ func (c *QrmarkController) SelectUserTotalPointsHandler(w http.ResponseWriter, r
 	json.NewEncoder(w).Encode(userTotalPoints)
 }
 
-func (c *QrmarkController) SelectSchoolPointsHandler(w http.ResponseWriter, req *http.Request) {
+func (c *QrmarkController) GetSchoolPointsHandler(w http.ResponseWriter, req *http.Request) {
 	schoolID, err := strconv.Atoi(mux.Vars(req)["id"])
 	if err != nil {
 		apierrors.ErrorHandler(w, req, err)
@@ -110,7 +110,7 @@ func verifyJWTWithECDSASignature(publicKey *ecdsa.PublicKey, tokenString string)
 	return token, nil
 }
 
-func (c *QrmarkController) SelectQrmarkListHandler(w http.ResponseWriter, req *http.Request) {
+func (c *QrmarkController) GetQrmarkListHandler(w http.ResponseWriter, req *http.Request) {
 	var page int = 0
 
 	queryMap := req.URL.Query()
@@ -151,7 +151,7 @@ func (c *QrmarkController) SelectQrmarkListHandler(w http.ResponseWriter, req *h
 	json.NewEncoder(w).Encode(qrmarkList)
 }
 
-func (c *QrmarkController) QrmarkHandler(w http.ResponseWriter, req *http.Request) {
+func (c *QrmarkController) PostQrmarkHandler(w http.ResponseWriter, req *http.Request) {
 	type ReqData struct {
 		Jwt string `json:"jwt"`
 	}

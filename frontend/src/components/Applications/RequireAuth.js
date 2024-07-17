@@ -13,7 +13,7 @@ const RequireAuth = ({ allowedRoles }) => {
     setIsPending(true);
     const FetchCurrentUser = async () => {
       try {
-        const response = await axios.get("/user/current",
+        const response = await axios.get("/users/current",
           {
             headers: {
               'Content-Type': 'text/plain; charset=utf-8',

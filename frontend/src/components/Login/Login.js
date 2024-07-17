@@ -3,7 +3,6 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import axios from '../../api/axios';
 import PasswordInput from "../Applications/Password"
 import {FormControl, FormLabel, Input, Button} from "@chakra-ui/react"
-import Header from '../Applications/Header';
 
 const Login = () => {
     const navigate = useNavigate();

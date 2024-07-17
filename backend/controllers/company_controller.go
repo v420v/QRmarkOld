@@ -20,7 +20,7 @@ func NewCompanyController(service services.CompanyServicer) *CompanyController {
 	}
 }
 
-func (c *CompanyController) SelectCompanyDetailHandler(w http.ResponseWriter, req *http.Request) {
+func (c *CompanyController) GetCompanyDetailHandler(w http.ResponseWriter, req *http.Request) {
 	schoolID, err := strconv.Atoi(mux.Vars(req)["id"])
 	if err != nil {
 		apierrors.ErrorHandler(w, req, err)
@@ -36,7 +36,7 @@ func (c *CompanyController) SelectCompanyDetailHandler(w http.ResponseWriter, re
 	json.NewEncoder(w).Encode(school)
 }
 
-func (c *CompanyController) SelectCompanyListHandler(w http.ResponseWriter, req *http.Request) {
+func (c *CompanyController) GetCompanyListHandler(w http.ResponseWriter, req *http.Request) {
 	page := 0
 	queryMap := req.URL.Query()
 

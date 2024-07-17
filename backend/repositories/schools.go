@@ -9,9 +9,7 @@ import (
 func SelectSchoolDetail(db *sql.DB, schoolID int) (models.School, error) {
 	var school models.School
 
-	const sqlStr = `
-	select * from schools where school_id = ?;
-	`
+	const sqlStr = `select * from schools where school_id = ?;`
 
 	row := db.QueryRow(sqlStr, schoolID)
 
@@ -32,9 +30,7 @@ func SelectSchoolDetail(db *sql.DB, schoolID int) (models.School, error) {
 }
 
 func SearchSchool(db *sql.DB, q string, page int) ([]models.School, bool, error) {
-	const sqlStr = `
-	select * from schools where name like CONCAT('%', ?, '%') limit ? offset ?;
-	`
+	const sqlStr = `select * from schools where name like CONCAT('%', ?, '%') limit ? offset ?;`
 
 	limit := 10
 	hasNext := false
@@ -66,9 +62,7 @@ func SearchSchool(db *sql.DB, q string, page int) ([]models.School, bool, error)
 }
 
 func SelectSchoolList(db *sql.DB, page int) ([]models.School, bool, error) {
-	const sqlStr = `
-	select * from schools limit ? offset ?;
-	`
+	const sqlStr = `select * from schools limit ? offset ?;`
 
 	limit := 10
 	hasNext := false

@@ -7,9 +7,10 @@ import (
 	"github.com/v420v/qrmarkapi/models"
 )
 
-// TODO: add user total_points snapshot table
 func SelectUserTotalPoints(db *sql.DB, userID int) (models.TotalPoints, error) {
-	row := db.QueryRow(`SELECT SUM(points) FROM qrmarks WHERE user_id = ?;`, userID)
+	const sqlStr = `SELECT COALESCE(SUM(points), 0) AS total_points FROM qrmarks WHERE user_id = ?;`
+
+	row := db.QueryRow(sqlStr, userID)
 
 	if err := row.Err(); err != nil {
 		return models.TotalPoints{}, err
@@ -26,7 +27,7 @@ func SelectUserTotalPoints(db *sql.DB, userID int) (models.TotalPoints, error) {
 }
 
 func SelectSchoolPoints(db *sql.DB, schoolID int) ([]models.StaticPoint, error) {
-	sql := `
+	const sql = `
 	SELECT
 	    combined.company_id,
 	    c.name as company_name,
@@ -81,7 +82,7 @@ func SelectSchoolPoints(db *sql.DB, schoolID int) ([]models.StaticPoint, error) 
 }
 
 func SelectUserQrmarkList(db *sql.DB, userID int, page int) ([]models.Qrmark, bool, error) {
-	sqlStr := `
+	const sqlStr = `
 	SELECT
 		b.qrmark_id,
 		b.user_id,
@@ -137,7 +138,7 @@ func SelectUserQrmarkList(db *sql.DB, userID int, page int) ([]models.Qrmark, bo
 }
 
 func SelectQrmarkList(db *sql.DB, page int) ([]models.Qrmark, bool, error) {
-	sqlStr := `
+	const sqlStr = `
 	SELECT
 		b.qrmark_id,
 		b.user_id,
@@ -191,11 +192,11 @@ func SelectQrmarkList(db *sql.DB, page int) ([]models.Qrmark, bool, error) {
 }
 
 func InsertQrmark(db *sql.DB, qrmarkInfo models.QrmarkInfo) error {
-	sql := `INSERT INTO qrmarks (qrmark_id, user_id, school_id, company_id, points, created_at) values (?, ?, (SELECT school_id FROM users WHERE user_id = ?), ?, ?, ?);`
+	const sqlStr = `INSERT INTO qrmarks (qrmark_id, user_id, school_id, company_id, points, created_at) values (?, ?, (SELECT school_id FROM users WHERE user_id = ?), ?, ?, ?);`
 
 	now := time.Now()
 
-	_, err := db.Exec(sql, qrmarkInfo.QrmarkID, qrmarkInfo.UserID, qrmarkInfo.UserID, qrmarkInfo.CompanyID, qrmarkInfo.Point, now)
+	_, err := db.Exec(sqlStr, qrmarkInfo.QrmarkID, qrmarkInfo.UserID, qrmarkInfo.UserID, qrmarkInfo.CompanyID, qrmarkInfo.Point, now)
 
 	if err != nil {
 		return err

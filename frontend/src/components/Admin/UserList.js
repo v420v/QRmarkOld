@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 
 const UserList = () => {
     const [pageNumber, setPageNumber] = useState(1);
-    const {error, isPending, data} = UseFetch(`/user/list?page=${pageNumber}`, [pageNumber]);
+    const {error, isPending, data} = UseFetch(`/users?page=${pageNumber}`, [pageNumber]);
 
     if (error) {
         return (<p>{error.message}</p>);

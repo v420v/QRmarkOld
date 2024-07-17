@@ -10,7 +10,7 @@ import (
 )
 
 func InsertVerificationToken(db *sql.DB, verification_token models.VerificationToken) error {
-	sqlStr := `insert into verification_tokens (user_id, token, expired_at) values (?, ?, ?);`
+	const sqlStr = `insert into verification_tokens (user_id, token, expired_at) values (?, ?, ?);`
 
 	_, err := db.Exec(sqlStr, verification_token.UserID, verification_token.Token, verification_token.ExpiredAt)
 	if err != nil {
@@ -21,10 +21,17 @@ func InsertVerificationToken(db *sql.DB, verification_token models.VerificationT
 }
 
 func VerifyUser(db *sql.DB, token string) error {
-	sqlStr := `update users
-	join verification_tokens on users.user_id = verification_tokens.user_id
-	set users.verified = true
-	where verification_tokens.token = ?;`
+	const sqlStr = `
+	update
+		users
+	join
+		verification_tokens
+	on
+		users.user_id = verification_tokens.user_id
+	set
+		users.verified = true
+	where
+		verification_tokens.token = ?;`
 
 	result, err := db.Exec(sqlStr, token)
 	if err != nil {
@@ -49,7 +56,13 @@ func InsertUser(db *sql.DB, user models.User) (models.User, error) {
 		return models.User{}, err
 	}
 
-	deleteUnverifiedUserSql := "delete from users where email = ? and verified = false"
+	const deleteUnverifiedUserSql = `
+	delete from
+		users
+	where
+		email = ?
+	and
+		verified = false`
 
 	_, err = tx.Exec(deleteUnverifiedUserSql, user.Email)
 	if err != nil {
@@ -59,9 +72,7 @@ func InsertUser(db *sql.DB, user models.User) (models.User, error) {
 
 	createdAt := time.Now()
 
-	const insertUserSqlStr = `
-	insert into users (name, email, password, role, school_id, verified, created_at) values (?, ?, ?, ?, ?, ?, ?);
-	`
+	const insertUserSqlStr = `insert into users (name, email, password, role, school_id, verified, created_at) values (?, ?, ?, ?, ?, ?, ?);`
 
 	var newUser models.User = models.User{
 		Name:     user.Name,
@@ -98,7 +109,19 @@ func SelectUserByEmail(db *sql.DB, email string) (models.User, error) {
 	var user models.User
 
 	const sqlStr = `
-	select user_id, name, email, password, role, school_id, verified, created_at from users where email = ?;
+	select
+		user_id,
+		name,
+		email,
+		password,
+		role,
+		school_id,
+		verified,
+		created_at
+	from
+		users
+	where
+		email = ?;
 	`
 
 	row := db.QueryRow(sqlStr, email)
@@ -173,7 +196,24 @@ func SelectUserDetail(db *sql.DB, userID int) (models.UserRes, error) {
 
 func SelectUserList(db *sql.DB, page int) ([]models.UserRes, bool, error) {
 	const sqlStr = `
-	select users.user_id, users.name, users.email, users.role, users.verified, schools.school_id, schools.name, schools.created_at, users.created_at from users join schools ON users.school_id = schools.school_id order by users.created_at desc limit ? offset ?;
+	select
+		users.user_id,
+		users.name,
+		users.email,
+		users.role,
+		users.verified,
+		schools.school_id,
+		schools.name,
+		schools.created_at,
+		users.created_at
+	from
+		users
+	join
+		schools
+	ON
+		users.school_id = schools.school_id
+	order by
+		users.created_at desc limit ? offset ?;
 	`
 
 	limit := 10

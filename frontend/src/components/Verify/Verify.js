@@ -6,7 +6,7 @@ import { Spinner } from '@chakra-ui/react'
 const Verify = () => {
     const { token } = useParams();
 
-    const {error, isPending, } = UseFetch(`/verify/${token}`);
+    const {error, isPending, } = UseFetch(`/users/verify/${token}`);
 
     return (
         <>

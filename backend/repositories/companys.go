@@ -9,9 +9,7 @@ import (
 func SelectCompanyDetail(db *sql.DB, companyID int) (models.Company, error) {
 	var company models.Company
 
-	const sqlStr = `
-	select * from companys where company_id = ?;
-	`
+	const sqlStr = `select * from companys where company_id = ?;`
 
 	row := db.QueryRow(sqlStr, companyID)
 
@@ -32,9 +30,7 @@ func SelectCompanyDetail(db *sql.DB, companyID int) (models.Company, error) {
 }
 
 func SelectCompanyList(db *sql.DB, page int) ([]models.Company, error) {
-	const sqlStr = `
-	select * from companys limit ? offset ?;
-	`
+	const sqlStr = `select * from companys limit ? offset ?;`
 
 	rows, err := db.Query(sqlStr, 10, ((page - 1) * 10))
 	if err != nil {

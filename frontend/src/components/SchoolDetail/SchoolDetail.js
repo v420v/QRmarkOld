@@ -8,8 +8,8 @@ import { TableContainer, Table, Thead, Tr, Th, Td, Tbody, Button } from '@chakra
 const SchoolDetail = () => {
     const { id } = useParams();
 
-    const {error: schoolDetailError, data: schoolDetail, } = UseFetch(`/school/${id}`)
-    const {error: schoolPointsError, isPending: schoolPointsIsPending, data: schoolPoints} = UseFetch(`/school/${id}/points`);
+    const {error: schoolDetailError, data: schoolDetail, } = UseFetch(`/schools/${id}`)
+    const {error: schoolPointsError, isPending: schoolPointsIsPending, data: schoolPoints} = UseFetch(`/schools/${id}/points`);
 
     const [downloadIsPending, setDownloadIsPending] = useState(false);
 

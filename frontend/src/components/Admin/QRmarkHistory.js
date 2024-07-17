@@ -8,7 +8,7 @@ import {ArrowBackIcon, ArrowForwardIcon} from "@chakra-ui/icons"
 
 const QRmarkHistory = () => {
     const [pageNumber, setPageNumber] = useState(1);
-    const {error, isPending, data} = UseFetch(`/qrmark/list?page=${pageNumber}`, [pageNumber]);
+    const {error, isPending, data} = UseFetch(`/qrmarks?page=${pageNumber}`, [pageNumber]);
 
     if (error) {
         return (<p>{error.message}</p>);

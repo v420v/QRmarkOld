@@ -1,9 +1,6 @@
 package services
 
 import (
-	"database/sql"
-	"errors"
-
 	"github.com/v420v/qrmarkapi/apierrors"
 	"github.com/v420v/qrmarkapi/models"
 	"github.com/v420v/qrmarkapi/repositories"
@@ -32,9 +29,6 @@ func (s *QrmarkAPIService) SelectQrmarkListService(page int) (models.QrmarkList,
 func (s *QrmarkAPIService) SelectUserTotalPointsService(userID int) (models.TotalPoints, error) {
 	totalPoints, err := repositories.SelectUserTotalPoints(s.DB, userID)
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return models.TotalPoints{Points: 0}, err
-		}
 		err = apierrors.GetDataFailed.Wrap(err, "fail to get data")
 		return models.TotalPoints{}, err
 	}

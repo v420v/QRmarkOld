@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 
 const TotalPoints = () => {
   const [CurrentUser] = useContext(CurrentUserContext);
-  const {error: totalPointsError, totalPointsIsPending, data: totalPointsData} = UseFetch(`/user/${CurrentUser.user_id}/total_points`)
+  const {error: totalPointsError, totalPointsIsPending, data: totalPointsData} = UseFetch(`/users/${CurrentUser.user_id}/points/total`)
   if (totalPointsError) {
     return <>読み込みに失敗</>;
   }
@@ -30,7 +30,7 @@ const TotalPoints = () => {
 const Home = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [CurrentUser, ] = useContext(CurrentUserContext);
-  const {error: historyError, isPending: historyIsPending, data: historyData} = UseFetch(`/qrmark/list?page=${pageNumber}&user=${CurrentUser.user_id}`, [pageNumber])
+  const {error: historyError, isPending: historyIsPending, data: historyData} = UseFetch(`/qrmarks?page=${pageNumber}&user=${CurrentUser.user_id}`, [pageNumber])
   const navigate = useNavigate();
   Moment.locale('ja');
 
