@@ -10,9 +10,9 @@ import (
 )
 
 func InsertVerificationToken(db *sql.DB, verification_token models.VerificationToken) error {
-	const sqlStr = `insert into verification_tokens (user_id, token, expired_at) values (?, ?, ?);`
+	const sqlStr = `insert into verification_tokens (user_id, token, expired_at) values (?, ?, DATE_ADD(NOW(), INTERVAL 1 HOUR));`
 
-	_, err := db.Exec(sqlStr, verification_token.UserID, verification_token.Token, verification_token.ExpiredAt)
+	_, err := db.Exec(sqlStr, verification_token.UserID, verification_token.Token)
 	if err != nil {
 		return err
 	}

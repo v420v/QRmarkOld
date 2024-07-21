@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"database/sql"
-	"time"
 
 	"github.com/v420v/qrmarkapi/models"
 )
@@ -35,7 +34,6 @@ func SelectSchoolPoints(db *sql.DB, schoolID int) ([]models.StaticPoint, error) 
 	    sum(combined.total_points) as total_points
 	FROM (
 	    SELECT
-	        school_id,
 	        company_id,
 	        total_points
 	    FROM
@@ -45,21 +43,18 @@ func SelectSchoolPoints(db *sql.DB, schoolID int) ([]models.StaticPoint, error) 
 	        AND snapshot_date = (SELECT max(snapshot_date) from qrmark_snapshots WHERE school_id = ?)
 	    UNION ALL
 	    SELECT
-	        school_id,
 	        company_id,
-	        sum(points) as total_points
+	        points
 	    from
 	        qrmarks
 	    where
 	        school_id = ?
 	        AND created_at > coalesce((select max(snapshot_date) from qrmark_snapshots WHERE school_id = ?), '1970-01-01')
-	    GROUP BY
-	        school_id, company_id
 	) as combined
 	INNER JOIN
 	    companys c on combined.company_id = c.company_id
 	GROUP BY
-	    combined.school_id, combined.company_id
+	    combined.company_id
 	ORDER BY
 	    combined.company_id;
 	`
@@ -192,11 +187,9 @@ func SelectQrmarkList(db *sql.DB, page int) ([]models.Qrmark, bool, error) {
 }
 
 func InsertQrmark(db *sql.DB, qrmarkInfo models.QrmarkInfo) error {
-	const sqlStr = `INSERT INTO qrmarks (qrmark_id, user_id, school_id, company_id, points, created_at) values (?, ?, (SELECT school_id FROM users WHERE user_id = ?), ?, ?, ?);`
+	const sqlStr = `INSERT INTO qrmarks (qrmark_id, user_id, school_id, company_id, points, created_at) values (?, ?, (SELECT school_id FROM users WHERE user_id = ?), ?, ?, now());`
 
-	now := time.Now()
-
-	_, err := db.Exec(sqlStr, qrmarkInfo.QrmarkID, qrmarkInfo.UserID, qrmarkInfo.UserID, qrmarkInfo.CompanyID, qrmarkInfo.Point, now)
+	_, err := db.Exec(sqlStr, qrmarkInfo.QrmarkID, qrmarkInfo.UserID, qrmarkInfo.UserID, qrmarkInfo.CompanyID, qrmarkInfo.Point)
 
 	if err != nil {
 		return err
