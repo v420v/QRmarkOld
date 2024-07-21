@@ -103,7 +103,7 @@ const Register = () => {
         setRegisterIsPending(true);
 
         try {
-            await axios.post('/user',
+            await axios.post('/users',
                 JSON.stringify({
                     "name": name,
                     "email": email,
