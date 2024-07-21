@@ -44,7 +44,7 @@ func SelectSchoolPoints(db *sql.DB, schoolID int) ([]models.StaticPoint, error) 
 	    c.company_id;
 	`
 
-	rows, err := db.Query(sql, schoolID, schoolID, schoolID, schoolID)
+	rows, err := db.Query(sql, schoolID)
 
 	if err != nil {
 		return []models.StaticPoint{}, err
