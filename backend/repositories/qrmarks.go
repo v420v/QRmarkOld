@@ -28,35 +28,20 @@ func SelectUserTotalPoints(db *sql.DB, userID int) (models.TotalPoints, error) {
 func SelectSchoolPoints(db *sql.DB, schoolID int) ([]models.StaticPoint, error) {
 	const sql = `
 	SELECT
-	    combined.company_id,
-	    c.name as company_name,
-	    c.created_at as company_created_at,
-	    sum(combined.total_points) as total_points
-	FROM (
-	    SELECT
-	        company_id,
-	        total_points
-	    FROM
-	        qrmark_snapshots
-	    WHERE
-	        school_id = ?
-	        AND snapshot_date = (SELECT max(snapshot_date) from qrmark_snapshots WHERE school_id = ?)
-	    UNION ALL
-	    SELECT
-	        company_id,
-	        points
-	    from
-	        qrmarks
-	    where
-	        school_id = ?
-	        AND created_at > coalesce((select max(snapshot_date) from qrmark_snapshots WHERE school_id = ?), '1970-01-01')
-	) as combined
+		c.company_id AS company_id,
+		c.name AS company_name,
+		c.created_at AS company_created_at,
+		sum(q.points) as total_points
+	FROM
+		qrmarks q
 	INNER JOIN
-	    companys c on combined.company_id = c.company_id
+		companys c on q.company_id = c.company_id
+	WHERE
+		q.school_id = ?
 	GROUP BY
-	    combined.company_id
+	    c.company_id
 	ORDER BY
-	    combined.company_id;
+	    c.company_id;
 	`
 
 	rows, err := db.Query(sql, schoolID, schoolID, schoolID, schoolID)

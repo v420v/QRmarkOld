@@ -42,13 +42,4 @@ create table if not exists qrmarks (
     foreign key (school_id) references schools(school_id)
 );
 
-create table if not exists qrmark_snapshots (
-    snapshot_id integer unsigned not null primary key auto_increment,
-    school_id integer unsigned not null,
-    company_id integer unsigned not null,
-    total_points integer unsigned not null,
-    snapshot_date datetime not null,
-    foreign key (company_id) references companys(company_id),
-    foreign key (school_id) references schools(school_id)
-);
 
