@@ -1,11 +1,9 @@
-**スペリングミス × companys    ◯ companies**<br/>
-**テストコードを書いてから修正します**
+> [!WARNING]
+> 設計があまりにも酷いため、作り直す予定です。
 
 # QRコード型ベルマーク「QRmark」
 
 もしベルマークがQRコードだったら...って思い作りました。
-
-<a href="https://ibukiqrmark.com">**QRmark アプリへのリンク**</a>
 
 <a href="https://github.com/v420v/QRmarkQRcode">**QRmark で使えるQRコードはこちら**</a>
 
